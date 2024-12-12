@@ -36,6 +36,15 @@ app.use(express.static(path.join(__dirname, "upload")));
 app.use("/api/users", userSignup);
 app.use("/api/messages", messages);
 
+// ----------------- code for Deployment--------------------
+if (process.env.NODE_ENV === "production") {
+  const dirPath = path.resolve();
+  app.use(express.static("./frontend/dist"));
+  app.get("*", (req, res) => {
+    res.sendFile(path.resolve(dirPath, "./frontend/dist", "index.html"));
+  });
+}
+
 // Listning on port
 server.listen(port, () =>
   console.log(`listening on port http://localhost:${port}/`)
